@@ -19,8 +19,11 @@ module "rds" {
   vpc_security_group_ids = [aws_security_group.rds.id]
   publicly_accessible    = true
 
-  db_name                     = local.db-name
-  username                    = "dbadmin"
-  port                        = "5432"
-  manage_master_user_password = true
+  db_name                                                = local.db-name
+  username                                               = "dbadmin"
+  port                                                   = "5432"
+  manage_master_user_password                            = true
+  manage_master_user_password_rotation                   = true
+  master_user_password_rotation_automatically_after_days = 30
+
 }
