@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yashilBBD/SpiderSolitaire.git"
+    "url": "git+https://github.com/Grad-Spider-Solitaire/SpiderSolitaireBE.git"
   },
   "author": "Yashil Luckan, Derryk Fivas, Luke Bradford, Liam Quick",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/yashilBBD/SpiderSolitaire/issues"
+    "url": "https://github.com/Grad-Spider-Solitaire/SpiderSolitaireBE/issues"
   },
-  "homepage": "https://github.com/yashilBBD/SpiderSolitaire#readme",
+  "homepage": "https://github.com/Grad-Spider-Solitaire/SpiderSolitaireBE#readme",
   "dependencies": {
     "express": "^4.19.2"
   }

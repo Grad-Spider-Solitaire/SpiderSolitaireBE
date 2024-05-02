@@ -1,6 +1,6 @@
 locals {
   account-id     = "466390025412"
-  full-repo-path = "yashilBBD/SpiderSolitaire"
+  full-repo-path = "Grad-Spider-Solitaire/SpiderSolitaireBE"
 }
 
 
