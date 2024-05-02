@@ -86,7 +86,7 @@ resource "aws_elastic_beanstalk_environment" "nodejs_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "SERVER_PORT"
-    value     = "8080"
+    value     = "5000"
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
