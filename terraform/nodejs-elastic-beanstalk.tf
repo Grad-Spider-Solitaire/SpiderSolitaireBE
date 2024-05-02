@@ -32,6 +32,7 @@ resource "aws_elastic_beanstalk_environment" "nodejs_env" {
   application         = aws_elastic_beanstalk_application.nodejs_app.name
   solution_stack_name = "64bit Amazon Linux 2023 v6.1.4 running Node.js 20"
   tier                = "WebServer"
+  version_label       = aws_elastic_beanstalk_application_version.default.name
 
   setting {
     namespace = "aws:ec2:vpc"
