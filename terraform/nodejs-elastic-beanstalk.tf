@@ -2,14 +2,6 @@ data "aws_secretsmanager_secret_version" "db-details" {
   secret_id = module.rds.db_instance_master_user_secret_arn
 }
 
-data "aws_secretsmanager_secret_version" "jwt-secret-key" {
-  secret_id = aws_secretsmanager_secret.jwt_secret_key.arn
-}
-
-resource "aws_secretsmanager_secret" "jwt_secret_key" {
-  name = "jwt-secret-key"
-}
-
 resource "aws_iam_role" "beanstalk_ec2" {
   assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}"
   description           = "Allows EC2 instances to call AWS services on your behalf."
@@ -111,10 +103,26 @@ resource "aws_elastic_beanstalk_environment" "nodejs_env" {
     name      = "DB_URL"
     value     = module.rds.db_instance_address
   }
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "JWT_SECRET_KEY"
-    value     = data.aws_secretsmanager_secret_version.jwt-secret-key.secret_string
-  }
 }
 
+
+data "archive_file" "backend_archive" {
+  type        = "zip"
+  source_dir  = "../backend/"
+  output_path = "backend.zip"
+}
+
+
+resource "aws_s3_object" "backend_zip" {
+  bucket     = aws_s3_bucket.beanstalk_bucket.bucket
+  key        = "beanstalk/backend-v1.zip"
+  source     = "backend.zip"
+  depends_on = [data.archive_file.backend_archive]
+}
+resource "aws_elastic_beanstalk_application_version" "default" {
+  name        = "node-js-app-version-label"
+  application = aws_elastic_beanstalk_application.nodejs_app.name
+  description = "application version created by terraform"
+  bucket      = aws_s3_bucket.beanstalk_bucket.bucket
+  key         = aws_s3_object.backend_zip.key
+}
