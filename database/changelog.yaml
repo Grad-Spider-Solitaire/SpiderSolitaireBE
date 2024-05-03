@@ -1,3 +1,11 @@
 databaseChangeLog:
-   - include:
-      file: ./database/test.sql
+  - include:
+      file: ./database/tableCreates.sql
+  #   - include:
+  #       file: ./database/tableAlters.sql
+  - include:
+      file: ./database/mockData/users.sql
+  - include:
+      file: ./database/mockData/game_results.sql
+  - include:
+      file: ./database/mockData/difficulty_levels.sql
