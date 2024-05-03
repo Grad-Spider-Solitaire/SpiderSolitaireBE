@@ -3,6 +3,8 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL
 );
+--rollback DROP TABLE "users";
+
 
 --changeset derryk:ddl:createTable:difficulty_levels
 CREATE TABLE difficulty_levels (
@@ -10,6 +12,7 @@ CREATE TABLE difficulty_levels (
     name VARCHAR(50) NOT NULL,
     suits INTEGER NOT NULL
 );
+--rollback DROP TABLE "difficulty_levels";
 
 --changeset derryk:ddl:createTable:game_results
 CREATE TABLE game_results (
@@ -20,3 +23,4 @@ CREATE TABLE game_results (
     game_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     game_duration INTERVAL NOT NULL
 );
+--rollback DROP TABLE "game_results";
