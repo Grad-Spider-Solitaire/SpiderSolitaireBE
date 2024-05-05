@@ -1,39 +1,37 @@
-const port = process.env.PORT || 3000,
-    http = require('http'),
-    fs = require('fs'),
-    html = fs.readFileSync('index.html');
+const express = require("express");
+const bodyParser = require("body-parser");
+const fs = require("fs");
+const html = fs.readFileSync("backend/index.html");
 
-const log = function(entry) {
-    fs.appendFileSync('/tmp/sample-app.log', new Date().toISOString() + ' - ' + entry + '\n');
+const app = express();
+const port = process.env.PORT || 3000;
+
+const log = function (entry) {
+  fs.appendFileSync(
+    "/tmp/sample-app.log",
+    new Date().toISOString() + " - " + entry + "\n"
+  );
 };
 
-const server = http.createServer(function (req, res) {
-    if (req.method === 'POST') {
-        let body = '';
+// Middleware to parse JSON bodies
+app.use(bodyParser.json());
 
-        req.on('data', function(chunk) {
-            body += chunk;
-        });
-
-        req.on('end', function() {
-            if (req.url === '/') {
-                log('Received a message.');
-            } else if (req.url = '/scheduled') {
-                log('Received task ' + req.headers['x-aws-sqsd-taskname'] + ' scheduled at ' + req.headers['x-aws-sqsd-scheduled-at']);
-            }
-
-            res.writeHead(200, 'OK', {'Content-Type': 'text/plain'});
-            res.end();
-        });
-    } else {
-        res.writeHead(200);
-        res.write(html);
-        res.end();
-    }
+// Endpoint for serving HTML content
+app.get("/", (req, res) => {
+  res.writeHead(200);
+  res.write(html);
+  res.end();
 });
 
-// Listen on port 3000, IP defaults to 127.0.0.1
-server.listen(port);
+// Mount the users router
+const usersRouter = require("./routes/users");
+app.use("/users", usersRouter);
 
-// Put a friendly message on the terminal
-console.log('Server running at http://127.0.0.1:' + port + '/');
+// Mount the game results router
+const gameResultsRouter = require("./routes/gameResults");
+app.use("/game-results", gameResultsRouter);
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running at http://127.0.0.1:${port}/`);
+});
