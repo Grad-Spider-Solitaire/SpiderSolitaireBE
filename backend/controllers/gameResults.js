@@ -1,53 +1,51 @@
-// Import any necessary modules or database connection setup
+const db = require("../../database/db");
 
-// Example function to get all game results
-const getGameResults = (req, res) => {
-  // Logic to retrieve all game results from the database
-  // Return the results as JSON response
-  res.json({ message: "Get all game results" });
-};
-
-// Example function to get a game result by ID
-const getGameResultById = (req, res) => {
-  // Extract the game result ID from the request parameters
-  const { id } = req.params;
-
-  // Logic to retrieve the game result with the specified ID from the database
-  // Return the result as JSON response
-  res.json({ message: `Get game result with ID ${id}` });
+const getGameResults = async (req, res) => {
+  try {
+    const results = await db.query("SELECT * FROM game_results");
+    res.json(results.rows);
+  } catch (error) {
+    console.error("Error fetching game results:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 // Example function to create a new game result
-const createGameResult = (req, res) => {
-  // Logic to create a new game result in the database based on the request body
-  // Return the newly created game result as JSON response
-  res.json({ message: "Create a new game result" });
-};
-
-// Example function to update a game result by ID
-const updateGameResult = (req, res) => {
-  // Extract the game result ID from the request parameters
-  const { id } = req.params;
-
-  // Logic to update the game result with the specified ID in the database based on the request body
-  // Return a message indicating the update was successful
-  res.json({ message: `Update game result with ID ${id}` });
+const createGameResult = async (req, res) => {
+  const { user_id, score, difficulty_level_id, game_duration } = req.body;
+  try {
+    const result = await db.query(
+      "INSERT INTO game_results (user_id, score, difficulty_level_id, game_date, game_duration) VALUES ($1, $2, $3, CURRENT_TIMESTAMP, $4) RETURNING *",
+      [user_id, score, difficulty_level_id, game_duration]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error("Error creating game result:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 // Example function to delete a game result by ID
-const deleteGameResult = (req, res) => {
-  // Extract the game result ID from the request parameters
-  const { id } = req.params;
-
-  // Logic to delete the game result with the specified ID from the database
-  // Return a message indicating the deletion was successful
-  res.json({ message: `Delete game result with ID ${id}` });
+const deleteGameResult = async (req, res) => {
+  const gameId = req.params.id;
+  try {
+    const result = await db.query(
+      "DELETE FROM game_results WHERE id = $1 RETURNING *",
+      [gameId]
+    );
+    if (result.rows.length === 0) {
+      res.status(404).json({ error: "Game result not found" });
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (error) {
+    console.error("Error deleting game result:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 module.exports = {
   getGameResults,
-  getGameResultById,
   createGameResult,
-  updateGameResult,
   deleteGameResult,
 };

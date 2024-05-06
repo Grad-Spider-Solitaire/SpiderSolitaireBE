@@ -7,14 +7,17 @@ const {
   createUser,
   updateUser,
   deleteUser,
+  getTopScoresForUser,
 } = require("../controllers/users.js");
 
 router.get("/getuser", getUsers);
 
-router.post("/", createUser);
+router.post("/createuser", createUser);
 
-router.put("/:userID", updateUser);
+router.put("/updateuser/:userID", updateUser);
 
-router.delete("/:userID", deleteUser);
+router.delete("/deleteuser/:userID", deleteUser);
+
+router.get("/:userId/topscores", getTopScoresForUser);
 
 module.exports = router;

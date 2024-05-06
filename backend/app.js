@@ -29,7 +29,7 @@ app.use("/users", usersRouter);
 
 // Mount the game results router
 const gameResultsRouter = require("./routes/gameResults");
-app.use("/game-results", gameResultsRouter);
+app.use("/gameresults", gameResultsRouter);
 
 // Start the server
 app.listen(port, () => {
