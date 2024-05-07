@@ -91,6 +91,11 @@ resource "aws_elastic_beanstalk_environment" "nodejs_env" {
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "DB_NAME"
+    value     = "TODO"
+  }
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_USERNAME"
     value     = module.rds.db_instance_username
   }
