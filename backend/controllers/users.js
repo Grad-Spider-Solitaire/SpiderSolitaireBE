@@ -1,64 +1,92 @@
-// usersController.js
+// controllers/users.js
 
-// Example functions for CRUD operations on users
+const db = require("../../database/db");
 
-// Example function to get all users
-const getUsers = (req, res) => {
-  // Logic to retrieve all users from the database
-  // Assuming users are fetched from a database
-  // Replace this with actual logic to fetch users from your database
-  const users = [
-    { id: 1, name: "User 1" },
-    { id: 2, name: "User 2" },
-    { id: 3, name: "User 3" },
-  ];
-
-  res.json(users); // Return users as JSON response
+// Get all users
+const getUsers = async (req, res) => {
+  try {
+    const queryText = "SELECT * FROM users";
+    const { rows } = await db.query(queryText);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error getting users:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-// Example function to get a user by ID
-const getUser = (req, res) => {
-  const userId = req.params.userID;
-  // Logic to retrieve a user by ID from the database
-  // Replace this with actual logic to fetch a user from your database
-  const user = { id: userId, name: "User " + userId };
-
-  res.json(user); // Return user as JSON response
+// Create a new user
+const createUser = async (req, res) => {
+  const { username } = req.body;
+  try {
+    const queryText = "INSERT INTO users (username) VALUES ($1) RETURNING *";
+    const { rows } = await db.query(queryText, [username]);
+    res.status(201).json(rows[0]);
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-// Example function to create a new user
-const createUser = (req, res) => {
-  // Logic to create a new user in the database
-  // Replace this with actual logic to create a user in your database
-  const newUser = req.body; // Assuming request body contains user data
-
-  res.status(201).json(newUser); // Return newly created user as JSON response
+// Update a user
+const updateUser = async (req, res) => {
+  const { userID } = req.params;
+  const { username } = req.body;
+  try {
+    const queryText =
+      "UPDATE users SET username = $1 WHERE id = $2 RETURNING *";
+    const { rows } = await db.query(queryText, [username, userID]);
+    if (rows.length === 0) {
+      res.status(404).json({ error: "User not found" });
+    } else {
+      res.status(200).json(rows[0]);
+    }
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-// Example function to update a user by ID
-const updateUser = (req, res) => {
-  const userId = req.params.userID;
-  // Logic to update a user by ID in the database
-  // Replace this with actual logic to update a user in your database
-  const updatedUser = { id: userId, name: "Updated User " + userId };
-
-  res.json(updatedUser); // Return updated user as JSON response
+// Delete a user
+const deleteUser = async (req, res) => {
+  const { userID } = req.params;
+  try {
+    const queryText = "DELETE FROM users WHERE id = $1 RETURNING *";
+    const { rows } = await db.query(queryText, [userID]);
+    if (rows.length === 0) {
+      res.status(404).json({ error: "User not found" });
+    } else {
+      res.status(200).json({ message: "User deleted successfully" });
+    }
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-// Example function to delete a user by ID
-const deleteUser = (req, res) => {
-  const userId = req.params.userID;
-  // Logic to delete a user by ID from the database
-  // Replace this with actual logic to delete a user from your database
+const getTopScoresForUser = async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    // Query to fetch the top 10 highest scores for the specified user
+    const queryText = `
+      SELECT *
+      FROM game_results 
+      WHERE user_id = $1 
+      ORDER BY score DESC 
+      LIMIT 10`;
+    const { rows } = await db.query(queryText, [userId]);
 
-  res.sendStatus(204); // Send no content status code to indicate successful deletion
+    // Extract scores from the query result
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching top scores for user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-// Export the controller functions
 module.exports = {
   getUsers,
-  getUser,
   createUser,
   updateUser,
   deleteUser,
+  getTopScoresForUser,
 };
