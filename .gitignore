@@ -167,3 +167,4 @@ override.tf.json
 .terraformrc
 terraform.rc
 *.zip
+backend/package-lock.json

@@ -30,7 +30,7 @@ jobs:
         zip -r deploy_package.zip .
 
     - name: Upload API Package
-      working-directory: ./bundle/api
+      working-directory: ./backend
       run: aws s3 cp deploy_package.zip s3://466390025412-deploy-bucket
 
     - name: Create New API Version

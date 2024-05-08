@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const fs = require("fs");
-const html = fs.readFileSync("backend/index.html");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,9 +17,7 @@ app.use(bodyParser.json());
 
 // Endpoint for serving HTML content
 app.get("/", (req, res) => {
-  res.writeHead(200);
-  res.write(html);
-  res.end();
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Mount the users router
