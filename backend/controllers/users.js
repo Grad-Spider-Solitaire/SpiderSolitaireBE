@@ -1,6 +1,6 @@
 // controllers/users.js
 
-const db = require("../../database/db");
+const db = require("../database/db");
 
 // Get all users
 const getUsers = async (req, res) => {
