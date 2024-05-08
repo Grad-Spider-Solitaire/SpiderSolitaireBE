@@ -32,7 +32,6 @@ resource "aws_elastic_beanstalk_environment" "nodejs_env" {
   application         = aws_elastic_beanstalk_application.nodejs_app.name
   solution_stack_name = "64bit Amazon Linux 2023 v6.1.4 running Node.js 20"
   tier                = "WebServer"
-  version_label       = aws_elastic_beanstalk_application_version.default.name
 
   setting {
     namespace = "aws:ec2:vpc"
@@ -111,24 +110,3 @@ resource "aws_elastic_beanstalk_environment" "nodejs_env" {
   }
 }
 
-
-data "archive_file" "backend_archive" {
-  type        = "zip"
-  source_dir  = "../backend/"
-  output_path = "backend.zip"
-}
-
-
-resource "aws_s3_object" "backend_zip" {
-  bucket     = aws_s3_bucket.beanstalk_bucket.bucket
-  key        = "beanstalk/backend-v1.zip"
-  source     = "backend.zip"
-  depends_on = [data.archive_file.backend_archive]
-}
-resource "aws_elastic_beanstalk_application_version" "default" {
-  name        = "node-js-app-version-label"
-  application = aws_elastic_beanstalk_application.nodejs_app.name
-  description = "application version created by terraform"
-  bucket      = aws_s3_bucket.beanstalk_bucket.bucket
-  key         = aws_s3_object.backend_zip.key
-}
