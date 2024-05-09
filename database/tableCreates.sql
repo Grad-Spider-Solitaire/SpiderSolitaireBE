@@ -21,6 +21,6 @@ CREATE TABLE game_results (
     score INTEGER NOT NULL,
     difficulty_level_id INTEGER NOT NULL REFERENCES difficulty_levels(id),
     game_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    game_duration INTERVAL NOT NULL
+    game_duration BIGINT NOT NULL
 );
 --rollback DROP TABLE "game_results";
