@@ -6,8 +6,8 @@ const {
     getAllDifficulties
 } = require("../controllers/difficulty.js");
 
-router.get("/difficulty", getAllDifficulties);
+router.get("/", getAllDifficulties);
 
-router.get("/difficulty/:suits", getDifficultyByNumberOfSuits);
+router.get("/:suits", getDifficultyByNumberOfSuits);
 
 module.exports = router;

@@ -24,7 +24,7 @@ const getDifficultyByNumberOfSuits = async (req, res) => {
             return;
         }
         const queryText = `SELECT * FROM difficulty_levels WHERE suits = $1`;
-        const { rows } = await db.query(queryText);
+        const { rows } = await db.query(queryText, [suits]);
         if (rows.length === 0) {
             res.status(404).json({ error: "Difficulty not found" });
         } else {
