@@ -6,10 +6,11 @@ const getTopScoresByDifficulty = async (req, res) => {
   try {
     // Query to fetch the top 10 highest scores for the specified user
     const queryText = `
-      SELECT *
+      SELECT game_results.*, users.username
       FROM game_results 
       WHERE difficulty_level_id = $1 
-      ORDER BY score DESC 
+      JOIN users ON game_results.user_id = users.id
+      ORDER BY score DESC, game_duration ASC
       LIMIT 10`;
     const { rows } = await db.query(queryText, [difficultyLevelId]);
     // Extract scores from the query result
