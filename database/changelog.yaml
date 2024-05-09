@@ -9,5 +9,3 @@ databaseChangeLog:
       file: ./database/mockData/users.sql
   - include:
       file: ./database/mockData/game_results.sql
-  - include:
-      file: ./database/mockData/new_difficulty_levels.sql
