@@ -2,10 +2,19 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const path = require('path');
-
-
+var cors = require('cors')
 const app = express();
+
 const port = process.env.PORT || 3000;
+
+
+
+var corsOptions = {
+  origin: 'http://spidersolitaire-fe-env.eba-xs2y2pex.eu-west-1.elasticbeanstalk.com/',
+  optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions)) ;
 
 const log = function (entry) {
   fs.appendFileSync(
