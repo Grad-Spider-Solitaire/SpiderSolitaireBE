@@ -108,5 +108,10 @@ resource "aws_elastic_beanstalk_environment" "nodejs_env" {
     name      = "DB_URL"
     value     = module.rds.db_instance_address
   }
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "DB_PORT"
+    value     = module.rds.db_instance_port
+  }
 }
 
