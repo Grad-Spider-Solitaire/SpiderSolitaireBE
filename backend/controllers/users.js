@@ -14,12 +14,30 @@ const getUsers = async (req, res) => {
   }
 };
 
+
+const getUser = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const queryText = "SELECT * FROM users WHERE email = $1";
+    const { rows } = await db.query(queryText, [email]);
+    res.status(200).json(rows[0]);
+    if (rows.length > 0) {
+      res.status(200).json(rows[0]);
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error getting user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 // Create a new user
 const createUser = async (req, res) => {
-  const { username } = req.body;
+  const { username, email } = req.body;
   try {
-    const queryText = "INSERT INTO users (username) VALUES ($1) RETURNING *";
-    const { rows } = await db.query(queryText, [username]);
+    const queryText = "INSERT INTO users (username, email) VALUES ($1, $2) RETURNING *";
+    const { rows } = await db.query(queryText, [username, email]);
     res.status(201).json(rows[0]);
   } catch (error) {
     console.error("Error creating user:", error);
@@ -30,11 +48,11 @@ const createUser = async (req, res) => {
 // Update a user
 const updateUser = async (req, res) => {
   const { userID } = req.params;
-  const { username } = req.body;
+  const { username, email } = req.body;
   try {
     const queryText =
-      "UPDATE users SET username = $1 WHERE id = $2 RETURNING *";
-    const { rows } = await db.query(queryText, [username, userID]);
+      "UPDATE users SET username = $1, email = $2 WHERE id = $3 RETURNING *";
+    const { rows } = await db.query(queryText, [username, email, userID]);
     if (rows.length === 0) {
       res.status(404).json({ error: "User not found" });
     } else {
@@ -63,17 +81,19 @@ const deleteUser = async (req, res) => {
   }
 };
 
+
+
 const getTopScoresForUser = async (req, res) => {
-  const userId = req.params.userId;
+  const userEmail = req.params.email;
   try {
     // Query to fetch the top 10 highest scores for the specified user
     const queryText = `
       SELECT *
       FROM game_results 
-      WHERE user_id = $1 
+      WHERE email = $1 
       ORDER BY score DESC 
       LIMIT 10`;
-    const { rows } = await db.query(queryText, [userId]);
+    const { rows } = await db.query(queryText, [userEmail]);
 
     // Extract scores from the query result
     res.json(rows);
@@ -85,6 +105,7 @@ const getTopScoresForUser = async (req, res) => {
 
 module.exports = {
   getUsers,
+  getUser,
   createUser,
   updateUser,
   deleteUser,
