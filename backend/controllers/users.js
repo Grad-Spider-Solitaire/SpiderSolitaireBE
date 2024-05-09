@@ -20,7 +20,6 @@ const getUser = async (req, res) => {
   try {
     const queryText = "SELECT * FROM users WHERE email = $1";
     const { rows } = await db.query(queryText, [email]);
-    res.status(200).json(rows[0]);
     if (rows.length > 0) {
       res.status(200).json(rows[0]);
     } else {
@@ -88,10 +87,11 @@ const getTopScoresForUser = async (req, res) => {
   try {
     // Query to fetch the top 10 highest scores for the specified user
     const queryText = `
-      SELECT *
-      FROM game_results 
-      WHERE email = $1 
-      ORDER BY score DESC 
+      SELECT game_results.*, users.username
+      FROM game_results
+      JOIN users ON game_results.user_id = users.id
+      WHERE game_results.difficulty_level_id = $1
+      ORDER BY score DESC, duration ASC
       LIMIT 10`;
     const { rows } = await db.query(queryText, [userEmail]);
 
