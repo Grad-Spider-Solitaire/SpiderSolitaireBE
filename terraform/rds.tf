@@ -29,9 +29,10 @@ module "rds" {
   create_db_parameter_group = false
   parameter_group_name      = "spidersolitaire-postgres-pg"
 
+  depends_on = [aws_db_parameter_group.spidersolitaire_pg_parameter_group]
 }
 
-resource "aws_db_parameter_group" "craft_beer_pg_parameter_group" {
+resource "aws_db_parameter_group" "spidersolitaire_pg_parameter_group" {
   name   = "spidersolitaire-postgres-pg"
   family = "postgres16"
 
