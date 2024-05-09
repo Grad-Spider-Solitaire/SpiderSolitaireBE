@@ -1,5 +1,25 @@
 const db = require("../database/db");
 
+
+const getTopScoresByDifficulty = async (req, res) => {
+  const { difficultyLevelId } = req.params;
+  try {
+    // Query to fetch the top 10 highest scores for the specified user
+    const queryText = `
+      SELECT *
+      FROM game_results 
+      WHERE difficulty_level_id = $1 
+      ORDER BY score DESC 
+      LIMIT 10`;
+    const { rows } = await db.query(queryText, [difficultyLevelId]);
+    // Extract scores from the query result
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching top scores by difficulty:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 const getGameResults = async (req, res) => {
   try {
     const results = await db.query("SELECT * FROM game_results");
@@ -45,6 +65,7 @@ const deleteGameResult = async (req, res) => {
 };
 
 module.exports = {
+  getTopScoresByDifficulty,
   getGameResults,
   createGameResult,
   deleteGameResult,
