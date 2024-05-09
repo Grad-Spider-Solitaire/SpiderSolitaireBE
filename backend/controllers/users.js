@@ -20,7 +20,6 @@ const getUser = async (req, res) => {
   try {
     const queryText = "SELECT * FROM users WHERE email = $1";
     const { rows } = await db.query(queryText, [email]);
-    res.status(200).json(rows[0]);
     if (rows.length > 0) {
       res.status(200).json(rows[0]);
     } else {
