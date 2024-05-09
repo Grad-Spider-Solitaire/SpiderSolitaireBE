@@ -3,10 +3,13 @@ const router = express.Router();
 
 // Example controller functions for handling game results
 const {
+  getTopScoresByDifficulty,
   getGameResults,
   createGameResult,
   deleteGameResult,
 } = require("../controllers/gameResults");
+
+router.get("/topscores/:difficultyLevelId", getTopScoresByDifficulty);
 
 // GET all game results
 router.get("/", getGameResults);
