@@ -9,7 +9,7 @@ const {
   deleteGameResult,
 } = require("../controllers/gameResults");
 
-router.get("/topscores/:difficultyLevel", getTopScoresByDifficulty);
+router.get("/topscores/:difficultyLevelId", getTopScoresByDifficulty);
 
 // GET all game results
 router.get("/", getGameResults);
