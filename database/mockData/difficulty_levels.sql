@@ -5,10 +5,10 @@ INSERT INTO difficulty_levels (name, suits) VALUES
 ('Hard', 8);
 --rollback DELETE FROM "difficulty_levels";
 
---changeset luke:dml:removeMockData:difficulty_levels
+--changeset luke:dml:removeMockData:difficulty_levels_delete
 DELETE FROM difficulty_levels;
 
---changeset luke:dml:addNewMockData:difficulty_levels
+--changeset luke:dml:addNewMockData:difficulty_levels_new_mock_data
 INSERT INTO difficulty_levels (name, suits) VALUES
 ('Easy', 1),
 ('Medium', 2),
