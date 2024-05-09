@@ -26,4 +26,17 @@ module "rds" {
   manage_master_user_password_rotation                   = true
   master_user_password_rotation_automatically_after_days = 30
 
+  create_db_parameter_group = false
+  parameter_group_name      = "spidersolitaire-postgres-pg"
+
+}
+
+resource "aws_db_parameter_group" "craft_beer_pg_parameter_group" {
+  name   = "spidersolitaire-postgres-pg"
+  family = "postgres16"
+
+  parameter {
+    name  = "rds.force_ssl"
+    value = "0"
+  }
 }
