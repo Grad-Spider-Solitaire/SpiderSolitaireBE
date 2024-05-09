@@ -27,7 +27,7 @@ module "rds" {
   master_user_password_rotation_automatically_after_days = 30
 
   create_db_parameter_group = false
-  parameter_group_name   = "spidersolitaire-postgres-pg"
+  parameter_group_name      = "spidersolitaire-postgres-pg"
 
 }
 
