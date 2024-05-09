@@ -12,6 +12,13 @@ const app = express();
 
 app.use(express.json());
 
+const corsOptions = {
+  origin: 'http://spidersolitaire-fe-env.eba-xs2y2pex.eu-west-1.elasticbeanstalk.com',
+  optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions)) ;
+
 // Apply middleware as needed for protected routes
 app.use('/gameresults', verifyToken, gameResults);
 app.use('/users', verifyToken, users);
@@ -27,15 +34,6 @@ module.exports = app;
 
 
 const port = process.env.PORT || 3000;
-
-
-
-var corsOptions = {
-  origin: 'http://spidersolitaire-fe-env.eba-xs2y2pex.eu-west-1.elasticbeanstalk.com/',
-  optionsSuccessStatus: 200
-}
-
-app.use(cors(corsOptions)) ;
 
 const log = function (entry) {
   fs.appendFileSync(
