@@ -6,6 +6,7 @@ var cors = require('cors')
 const { verifyToken } = require('./controllers/auth');
 const gameResults = require('./routes/gameResults');
 const users = require('./routes/users');
+const difficulty = require('./routes/difficulty');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 // Apply middleware as needed for protected routes
 app.use('/gameresults', verifyToken, gameResults);
 app.use('/users', verifyToken, users);
+app.use('/difficulty', verifyToken, difficulty);
 
 // Public route
 app.get('/', (req, res) => {

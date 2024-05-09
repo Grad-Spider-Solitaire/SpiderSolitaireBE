@@ -4,3 +4,4 @@ INSERT INTO difficulty_levels (name, suits) VALUES
 ('Medium', 6),
 ('Hard', 8);
 --rollback DELETE FROM "difficulty_levels";
+
