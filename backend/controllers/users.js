@@ -1,5 +1,3 @@
-// controllers/users.js
-
 const db = require("../database/db");
 
 // Get all users
@@ -13,7 +11,6 @@ const getUsers = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 const getUser = async (req, res) => {
   const { email } = req.params;
@@ -35,7 +32,8 @@ const getUser = async (req, res) => {
 const createUser = async (req, res) => {
   const { username, email } = req.body;
   try {
-    const queryText = "INSERT INTO users (username, email) VALUES ($1, $2) RETURNING *";
+    const queryText =
+      "INSERT INTO users (username, email) VALUES ($1, $2) RETURNING *";
     const { rows } = await db.query(queryText, [username, email]);
     res.status(201).json(rows[0]);
   } catch (error) {
@@ -79,7 +77,6 @@ const deleteUser = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 module.exports = {
   getUsers,

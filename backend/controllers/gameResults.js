@@ -1,6 +1,5 @@
 const db = require("../database/db");
 
-
 const getTopScoresByDifficulty = async (req, res) => {
   const { difficultyLevelId } = req.params;
   try {
@@ -31,7 +30,6 @@ const getGameResults = async (req, res) => {
   }
 };
 
-// Example function to create a new game result
 const createGameResult = async (req, res) => {
   const { user_id, score, difficulty_level_id, game_duration } = req.body;
   try {
@@ -46,7 +44,6 @@ const createGameResult = async (req, res) => {
   }
 };
 
-// Example function to delete a game result by ID
 const deleteGameResult = async (req, res) => {
   const gameId = req.params.id;
   try {
